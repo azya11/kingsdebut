@@ -111,15 +111,18 @@ test files live and the `_test.go` suffix.
 - Add `xo.exe` to `.gitignore` (build artifacts should not be tracked).
 
 **Acceptance criteria.**
-- +`go run .` launches a window without errors.
-- +`go test ./...` reports `ok` for `internal/chess`.
-- `go vet ./...` is clean.
++ `go run .` launches a window without errors.
++ `go test ./...` reports `ok` for `internal/chess`.
++ `go vet ./...` is clean.
 - `git status` shows `xo.exe` is no longer tracked as a modified file.
 
 **Self-check.**
 1. What is the difference between a *package* and a *module*?
+  Package is the way to organize things in single directory, module is a set of packages that work outside directories
 2. Why can code outside this module not import `kingsdebut.com/xo/internal/chess`?
+  Because it was never imported there
 3. What does `go test ./...` mean — specifically the `./...` part?
+  go test runs tests on the machine, ./... is wildcard that allows to search for all the tests inside the directories inside
 
 **Ask Claude for.** Explanations of `go.mod` fields; what a specific `go vet` warning means; how to
 remove an already-tracked file from git without deleting it from disk.
