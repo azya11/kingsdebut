@@ -11,6 +11,8 @@ import (
 func main() {
 	a := app.New()
 	w := a.NewWindow("Update Time")
+	w.CenterOnScreen()
+	w.SetTitle("Kings Debut")
 
 	message := widget.NewLabel("Welcome")
 	button := widget.NewButton("Update", func() {
