@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os/exec"
 
@@ -9,8 +8,7 @@ import (
 )
 
 type Game struct {
-	quit   bool
-	pieces []Pieces
+	quit bool
 }
 
 // Update proceeds the game state.
@@ -46,22 +44,20 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeigh
 }
 
 func main() {
-	game := &Game{}
-	game.quit = false
+	game := &Game{false}
 	// Specify the window size as you like. Here, a doubled size is specified.
 	ebiten.SetWindowSize(640, 480)
 	ebiten.SetWindowTitle("kingsdebut")
 	// Call ebiten.RunGame to start your game loop.
 	if err := ebiten.RunGame(game); err != nil {
 
-		cmd := exec.Command("./stockfisheng/stockfish-windows-x86-64-avx2.exe")
-		out, err := cmd.Output()
-
+		cmd := exec.Command("./stockfisheng/stockfish-windows-x86-64-avx2.exe") //Added error handling
+		if err := cmd.Run(); err != nil {
+			log.Fatal(err)
+		}
 		if err != nil {
 			log.Fatalf("command failed: %v", err)
 		}
-
-		fmt.Println(string(out))
 
 		log.Fatal(err)
 	}
