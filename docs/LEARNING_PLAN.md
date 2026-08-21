@@ -111,8 +111,8 @@ test files live and the `_test.go` suffix.
 - Add `xo.exe` to `.gitignore` (build artifacts should not be tracked).
 
 **Acceptance criteria.**
-- `go run .` launches a window without errors.
-- `go test ./...` reports `ok` for `internal/chess`.
+- +`go run .` launches a window without errors.
+- +`go test ./...` reports `ok` for `internal/chess`.
 - `go vet ./...` is clean.
 - `git status` shows `xo.exe` is no longer tracked as a modified file.
 
