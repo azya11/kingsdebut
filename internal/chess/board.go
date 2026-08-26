@@ -4,6 +4,8 @@
 
 package chess
 
+import "errors"
+
 //Basic type for Pieces in chess logic. (Just basic OOP, nothing too crazy here)
 type PieceType struct {
 	Pcolor string // "White", "Black", ""
@@ -27,6 +29,9 @@ type Board struct {
 // Convert chess notation into number: e4 -> 28 (Implemented manipulating on ASCII conversion)
 //I am not sure if I want to return plain int or obj Square, note taken.
 func Str2Sqr(str string) (Square, error) {
+	if len(str) != 2 {
+		return Square(-1), errors.New("string < 2")
+	}
 	runes := []rune(str)
 	// I wrote this line without any help I promise
 	x := (((int(runes[1]) - 49) * 8) + ((int(runes[0])) - 97))
