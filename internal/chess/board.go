@@ -37,7 +37,7 @@ func Str2Sqr(str string) (Square, error) {
 //8.22 3:20 Changes to creation of new board.
 func NewBoard() (Board, error) {
 	i := 0
-	var default_pieces [64]*PieceType
+	var default_pieces []PieceType
 	var k_white int8 = 2
 	var j_white int8 = 4
 	var k_black int8 = 2
