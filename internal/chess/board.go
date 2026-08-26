@@ -4,9 +4,11 @@
 
 package chess
 
-import "errors"
+import (
+	"errors"
+)
 
-//Basic type for Pieces in chess logic. (Just basic OOP, nothing too crazy here)
+// Basic type for Pieces in chess logic. (Just basic OOP, nothing too crazy here)
 type PieceType struct {
 	Pcolor string // "White", "Black", ""
 	Ptype  int8   // 1-Pawn 2-Rook 3-Knight 4-Bishop 5-Queen 6-King
@@ -18,7 +20,7 @@ func newPieceType() PieceType {
 	}
 }
 
-//??? idk why but I will need it in future
+// ??? idk why but I will need it in future
 type Square int
 
 type Board struct {
@@ -27,7 +29,7 @@ type Board struct {
 }
 
 // Convert chess notation into number: e4 -> 28 (Implemented manipulating on ASCII conversion)
-//I am not sure if I want to return plain int or obj Square, note taken.
+// I am not sure if I want to return plain int or obj Square, note taken.
 func Str2Sqr(str string) (Square, error) {
 	if len(str) != 2 {
 		return Square(-1), errors.New("string < 2")
@@ -39,7 +41,7 @@ func Str2Sqr(str string) (Square, error) {
 	return sqr, nil
 }
 
-//8.22 3:20 Changes to creation of new board.
+// 8.22 3:20 Changes to creation of new board.
 func NewBoard() (Board, error) {
 	i := 0
 	var b Board
@@ -61,7 +63,7 @@ func NewBoard() (Board, error) {
 		// Create for White: Bishop(5) -> Knight(6) -> Rook(7)
 		if (i > 4) && (i < 8) {
 			piece.Ptype = j_white
-			piece.Pcolor = "White"
+			piece.Pcolor = "white"
 			j_white--
 			b.Bpieces[i] = piece
 		}
@@ -114,7 +116,71 @@ func Black() string {
 	return "Black"
 }
 
-//Just let it be here I hate empty main
+// Just let it be here I hate empty main
 func Sum(x int, y int) (int, error) {
 	return x + y, nil
+}
+
+func DisplayBoard(x Board) {
+	i := 7
+	k := 0
+	println("a b c d e f g h")
+	println()
+	for i >= 0 {
+		j := 7
+		for j >= 0 {
+			PrintE(x.Bpieces[k])
+			k++
+			j--
+		}
+		println()
+		i--
+	}
+}
+
+func PrintE(p PieceType) error {
+	str := '0'
+
+	if p.Pcolor == "white" {
+		if p.Ptype == 1 {
+			str = 'P'
+		}
+		if p.Ptype == 2 {
+			str = 'R'
+		}
+		if p.Ptype == 3 {
+			str = 'K'
+		}
+		if p.Ptype == 4 {
+			str = 'B'
+		}
+		if p.Ptype == 5 {
+			str = 'Q'
+		}
+		if p.Ptype == 6 {
+			str = 'K'
+		}
+	}
+	if p.Pcolor == "black" {
+		if p.Ptype == 1 {
+			str = 'p'
+		}
+		if p.Ptype == 2 {
+			str = 'r'
+		}
+		if p.Ptype == 3 {
+			str = 'k'
+		}
+		if p.Ptype == 4 {
+			str = 'b'
+		}
+		if p.Ptype == 5 {
+			str = 'q'
+		}
+		if p.Ptype == 6 {
+			str = 'g'
+		}
+	}
+	print(str)
+	return nil
 }
