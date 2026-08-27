@@ -129,7 +129,7 @@ remove an already-tracked file from git without deleting it from disk.
 
 ---
 
-## M1 — Board and piece types - STARTED
+## M1 — Board and piece types - DONE (MODIFICATIONS LOWKEY NEEDED)
 
 **Goal.** Represent a chess position in memory and print it to the terminal.
 
@@ -164,7 +164,7 @@ math is confusing; whether your `String()` output convention is standard.
 
 ---
 
-## M2 — FEN: loading and exporting positions
+## M2 — FEN: loading and exporting positions (Started)
 
 **Goal.** Convert between a FEN string and your `Board`, in both directions.
 
