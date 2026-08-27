@@ -91,7 +91,7 @@ Every milestone below has the same six sections:
 
 ---
 
-## M0 — Toolchain and module hygiene
+## M0 — Toolchain and module hygiene - DONE
 
 **Goal.** Be able to build, run, test, and vet this project confidently, and understand what
 `go.mod` is doing.
@@ -129,7 +129,7 @@ remove an already-tracked file from git without deleting it from disk.
 
 ---
 
-## M1 — Board and piece types
+## M1 — Board and piece types - STARTED
 
 **Goal.** Represent a chess position in memory and print it to the terminal.
 
