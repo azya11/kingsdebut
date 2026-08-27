@@ -6,6 +6,7 @@ package chess
 
 import (
 	"errors"
+	"fmt"
 )
 
 // Basic type for Pieces in chess logic. (Just basic OOP, nothing too crazy here)
@@ -70,6 +71,8 @@ func NewBoard() (Board, error) {
 
 		// Create for White: Set of Pawns (8-15)
 		if (i > 7) && (i < 16) {
+			piece.Ptype = 1
+			piece.Pcolor = "white"
 			b.Bpieces[i] = piece
 		}
 
@@ -81,13 +84,12 @@ func NewBoard() (Board, error) {
 		// Create for Black: Set of Pawns (48-55)
 		if (i > 47) && (i < 56) {
 			piece.Ptype = 1
-			var color string = "black"
-			piece.Pcolor = color
+			piece.Pcolor = "black"
 			b.Bpieces[i] = piece
 		}
 
 		// Create for Black: Rook(56) -> Knight(57) -> Bishop(58) -> Queen(59) -> King(60)
-		if (i > 55) && (i < 60) {
+		if (i > 55) && (i < 61) {
 			piece.Pcolor = "black"
 			piece.Ptype = k_black
 			k_black++ //I am either idiot or genious for this line of code
@@ -124,7 +126,8 @@ func Sum(x int, y int) (int, error) {
 func DisplayBoard(x Board) {
 	i := 7
 	k := 0
-	println("a b c d e f g h")
+	m := 1
+	println("a b c d e f g h ")
 	println()
 	for i >= 0 {
 		j := 7
@@ -133,7 +136,9 @@ func DisplayBoard(x Board) {
 			k++
 			j--
 		}
+		fmt.Printf("  [%v]", m)
 		println()
+		m++
 		i--
 	}
 }
@@ -158,7 +163,7 @@ func PrintE(p PieceType) error {
 			str = 'Q'
 		}
 		if p.Ptype == 6 {
-			str = 'K'
+			str = 'G'
 		}
 	}
 	if p.Pcolor == "black" {
@@ -181,6 +186,6 @@ func PrintE(p PieceType) error {
 			str = 'g'
 		}
 	}
-	print(str)
+	fmt.Printf("%c ", str)
 	return nil
 }

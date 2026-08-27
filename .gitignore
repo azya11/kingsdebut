@@ -1,2 +1,4 @@
 stockfish/
 xo.exe
+*.exe
+chess.test.exe
