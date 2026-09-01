@@ -7,6 +7,7 @@ package chess
 import (
 	"errors"
 	"fmt"
+	"strconv"
 )
 
 // Basic type for Pieces in chess logic. (Just basic OOP, nothing too crazy here)
@@ -46,6 +47,7 @@ func Str2Sqr(str string) (Square, error) {
 func NewBoard() (Board, error) {
 	i := 0
 	var b Board
+	b.Bmove = "white"
 	var k_white int8 = 2
 	var j_white int8 = 4
 	var k_black int8 = 2
@@ -78,6 +80,8 @@ func NewBoard() (Board, error) {
 
 		// Create empty pieces (16-47)
 		if (i > 15) && (i < 48) {
+			piece.Ptype = 0
+			piece.Pcolor = ""
 			b.Bpieces[i] = piece
 		}
 
@@ -116,12 +120,7 @@ func White() string {
 
 func Black() string {
 	return "Black"
-}
-
-// Just let it be here I hate empty main
-func Sum(x int, y int) (int, error) {
-	return x + y, nil
-}
+} // this is dumb bro, why did wrote it?!
 
 func DisplayBoard(x Board) {
 	i := 7
@@ -143,6 +142,42 @@ func DisplayBoard(x Board) {
 	}
 }
 
+func ParseFEN(x Board) string {
+	i := 7
+	k := 0
+	m := 0
+	y := ""
+	for i >= 0 {
+		j := 7
+		for j >= 0 {
+			if x.Bpieces[m].Ptype != 0 {
+				y = y + PieceTypeA(x.Bpieces[m])
+
+			} else {
+				k++
+			}
+			m++
+			j--
+		}
+		if k > 0 {
+			y = y + strconv.Itoa(k)
+		}
+		y = y + "/"
+		i--
+		k = 0
+	}
+	y = y + " "
+	if x.Bmove == "white" {
+		y = y + "w"
+	} else {
+		y = y + "b"
+	}
+
+	//ADD CASTLING RIGHTS, EN PAUSSANT, HALF-MOVE CLOCK, FULL MOVE
+	fmt.Print(y)
+	return y
+}
+
 func PrintE(p PieceType) error {
 	str := '0'
 
@@ -154,7 +189,7 @@ func PrintE(p PieceType) error {
 			str = 'R'
 		}
 		if p.Ptype == 3 {
-			str = 'K'
+			str = 'N'
 		}
 		if p.Ptype == 4 {
 			str = 'B'
@@ -163,7 +198,7 @@ func PrintE(p PieceType) error {
 			str = 'Q'
 		}
 		if p.Ptype == 6 {
-			str = 'G'
+			str = 'K'
 		}
 	}
 	if p.Pcolor == "black" {
@@ -174,7 +209,7 @@ func PrintE(p PieceType) error {
 			str = 'r'
 		}
 		if p.Ptype == 3 {
-			str = 'k'
+			str = 'n'
 		}
 		if p.Ptype == 4 {
 			str = 'b'
@@ -183,9 +218,55 @@ func PrintE(p PieceType) error {
 			str = 'q'
 		}
 		if p.Ptype == 6 {
-			str = 'g'
+			str = 'k'
 		}
 	}
 	fmt.Printf("%c ", str)
 	return nil
+}
+
+func PieceTypeA(p PieceType) string {
+	str := "0"
+
+	if p.Pcolor == "white" {
+		if p.Ptype == 1 {
+			str = "P"
+		}
+		if p.Ptype == 2 {
+			str = "R"
+		}
+		if p.Ptype == 3 {
+			str = "N"
+		}
+		if p.Ptype == 4 {
+			str = "B"
+		}
+		if p.Ptype == 5 {
+			str = "Q"
+		}
+		if p.Ptype == 6 {
+			str = "K"
+		}
+	}
+	if p.Pcolor == "black" {
+		if p.Ptype == 1 {
+			str = "p"
+		}
+		if p.Ptype == 2 {
+			str = "r"
+		}
+		if p.Ptype == 3 {
+			str = "n"
+		}
+		if p.Ptype == 4 {
+			str = "b"
+		}
+		if p.Ptype == 5 {
+			str = "q"
+		}
+		if p.Ptype == 6 {
+			str = "k"
+		}
+	}
+	return str
 }

@@ -16,5 +16,5 @@ func main() {
 		println("Failed to initalize new board")
 	}
 	chess.DisplayBoard(board)
-
+	chess.ParseFEN(board)
 }
