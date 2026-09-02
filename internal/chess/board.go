@@ -7,7 +7,6 @@ package chess
 import (
 	"errors"
 	"fmt"
-	"strconv"
 )
 
 // Basic type for Pieces in chess logic. (Just basic OOP, nothing too crazy here)
@@ -26,8 +25,12 @@ func newPieceType() PieceType {
 type Square int
 
 type Board struct {
-	Bpieces [64]PieceType
-	Bmove   string // White ,Blacks
+	Bpieces   [64]PieceType
+	Bmove     string // White ,Blacks
+	Bcastling string
+	Benpass   bool
+	Bhalf     int
+	Bfull     int
 }
 
 // Convert chess notation into number: e4 -> 28 (Implemented manipulating on ASCII conversion)
@@ -114,14 +117,6 @@ func NewBoard() (Board, error) {
 
 }
 
-func White() string {
-	return "White"
-}
-
-func Black() string {
-	return "Black"
-} // this is dumb bro, why did wrote it?!
-
 func DisplayBoard(x Board) {
 	i := 7
 	k := 0
@@ -142,42 +137,7 @@ func DisplayBoard(x Board) {
 	}
 }
 
-func ParseFEN(x Board) string {
-	i := 7
-	k := 0
-	m := 0
-	y := ""
-	for i >= 0 {
-		j := 7
-		for j >= 0 {
-			if x.Bpieces[m].Ptype != 0 {
-				y = y + PieceTypeA(x.Bpieces[m])
-
-			} else {
-				k++
-			}
-			m++
-			j--
-		}
-		if k > 0 {
-			y = y + strconv.Itoa(k)
-		}
-		y = y + "/"
-		i--
-		k = 0
-	}
-	y = y + " "
-	if x.Bmove == "white" {
-		y = y + "w"
-	} else {
-		y = y + "b"
-	}
-
-	//ADD CASTLING RIGHTS, EN PAUSSANT, HALF-MOVE CLOCK, FULL MOVE
-	fmt.Print(y)
-	return y
-}
-
+// Prints Piece
 func PrintE(p PieceType) error {
 	str := '0'
 
@@ -225,6 +185,7 @@ func PrintE(p PieceType) error {
 	return nil
 }
 
+// Returns PIECE
 func PieceTypeA(p PieceType) string {
 	str := "0"
 
