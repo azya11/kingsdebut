@@ -42,6 +42,17 @@ func FEN(x Board) string {
 	}
 
 	//ADD CASTLING RIGHTS, EN PAUSSANT, HALF-MOVE CLOCK, FULL MOVE
+	y = y + x.Bcastling + " "
+	if x.Benpass {
+		y = y + "+ "
+	} else {
+		y = y + "- "
+	}
+
+	y = y + strconv.Itoa(x.Bhalf)
+	y = y + " "
+	y = y + strconv.Itoa(x.Bfull)
+
 	fmt.Print(y)
 	return y
 }
@@ -49,5 +60,6 @@ func FEN(x Board) string {
 // Converts FEN string into board
 func ParseFEN(x string) (Board, error) {
 	var b Board
+
 	return b, nil
 }
