@@ -24,11 +24,14 @@ func newPieceType() PieceType {
 // ??? idk why but I will need it in future
 type Square int
 
+// NoSquare represents the absence of an en passant target.
+const NoSquare Square = -1
+
 type Board struct {
 	Bpieces   [64]PieceType
 	Bmove     string // White ,Blacks
 	Bcastling string
-	Benpass   bool
+	Benpass   Square // en passant target, or NoSquare when unavailable
 	Bhalf     int
 	Bfull     int
 }
@@ -55,6 +58,9 @@ func NewBoard() (Board, error) {
 	i := 0
 	var b Board
 	b.Bmove = "white"
+	b.Bcastling = "KQkq"
+	b.Benpass = NoSquare
+	b.Bfull = 1
 	var k_white int8 = 2
 	var j_white int8 = 4
 	var k_black int8 = 2
