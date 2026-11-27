@@ -5,8 +5,8 @@
 package chess
 
 import (
-	"errors"
 	"fmt"
+	"strings"
 )
 
 // Basic type for Pieces in chess logic. (Just basic OOP, nothing too crazy here)
@@ -25,27 +25,36 @@ func newPieceType() PieceType {
 type Square int
 
 type Board struct {
-	Bpieces [64]PieceType
-	Bmove   string // White ,Blacks
+	Bpieces   [64]PieceType
+	Bmove     string // White ,Blacks
+	Bcastling string
+	Benpass   bool
+	Bhalf     int
+	Bfull     int
 }
 
 // Convert chess notation into number: e4 -> 28 (Implemented manipulating on ASCII conversion)
 // I am not sure if I want to return plain int or obj Square, note taken.
 func Str2Sqr(str string) (Square, error) {
-	if len(str) != 2 {
-		return Square(-1), errors.New("string < 2")
+	if len(str) != 2 || str[0] < 'a' || str[0] > 'h' || str[1] < '1' || str[1] > '8' {
+		return Square(-1), fmt.Errorf("invalid square %q: expected a1 through h8", str)
 	}
-	runes := []rune(str)
-	// I wrote this line without any help I promise
-	x := (((int(runes[1]) - 49) * 8) + ((int(runes[0])) - 97))
-	sqr := Square(x)
-	return sqr, nil
+	return Square((str[1]-'1')*8 + (str[0] - 'a')), nil
+}
+
+// Sqr2Str converts an index from 0 to 63 into algebraic notation.
+func Sqr2Str(sq Square) (string, error) {
+	if sq < 0 || sq >= 64 {
+		return "", fmt.Errorf("invalid square index %d", sq)
+	}
+	return string([]byte{byte(sq%8) + 'a', byte(sq/8) + '1'}), nil
 }
 
 // 8.22 3:20 Changes to creation of new board.
 func NewBoard() (Board, error) {
 	i := 0
 	var b Board
+	b.Bmove = "white"
 	var k_white int8 = 2
 	var j_white int8 = 4
 	var k_black int8 = 2
@@ -78,6 +87,8 @@ func NewBoard() (Board, error) {
 
 		// Create empty pieces (16-47)
 		if (i > 15) && (i < 48) {
+			piece.Ptype = 0
+			piece.Pcolor = ""
 			b.Bpieces[i] = piece
 		}
 
@@ -110,82 +121,48 @@ func NewBoard() (Board, error) {
 
 }
 
-func White() string {
-	return "White"
-}
-
-func Black() string {
-	return "Black"
-}
-
-// Just let it be here I hate empty main
-func Sum(x int, y int) (int, error) {
-	return x + y, nil
-}
-
 func DisplayBoard(x Board) {
-	i := 7
-	k := 0
-	m := 1
-	println("a b c d e f g h ")
-	println()
-	for i >= 0 {
-		j := 7
-		for j >= 0 {
-			PrintE(x.Bpieces[k])
-			k++
-			j--
-		}
-		fmt.Printf("  [%v]", m)
-		println()
-		m++
-		i--
-	}
+	fmt.Println(x)
 }
 
-func PrintE(p PieceType) error {
-	str := '0'
+// String displays rank 8 first and rank 1 last.
+func (b Board) String() string {
+	var out strings.Builder
+	for rank := 7; rank >= 0; rank-- {
+		fmt.Fprintf(&out, "%d ", rank+1)
+		for file := 0; file < 8; file++ {
+			fmt.Fprintf(&out, "%s ", b.Bpieces[rank*8+file])
+		}
+		out.WriteByte('\n')
+	}
+	out.WriteString("  a b c d e f g h")
+	return out.String()
+}
 
-	if p.Pcolor == "white" {
-		if p.Ptype == 1 {
-			str = 'P'
-		}
-		if p.Ptype == 2 {
-			str = 'R'
-		}
-		if p.Ptype == 3 {
-			str = 'K'
-		}
-		if p.Ptype == 4 {
-			str = 'B'
-		}
-		if p.Ptype == 5 {
-			str = 'Q'
-		}
-		if p.Ptype == 6 {
-			str = 'G'
-		}
+// String returns the usual letter for a piece, or a dot for an empty square.
+func (p PieceType) String() string {
+	if p.Ptype < 1 || p.Ptype > 6 {
+		return "."
 	}
-	if p.Pcolor == "black" {
-		if p.Ptype == 1 {
-			str = 'p'
-		}
-		if p.Ptype == 2 {
-			str = 'r'
-		}
-		if p.Ptype == 3 {
-			str = 'k'
-		}
-		if p.Ptype == 4 {
-			str = 'b'
-		}
-		if p.Ptype == 5 {
-			str = 'q'
-		}
-		if p.Ptype == 6 {
-			str = 'g'
-		}
+	var letters string
+	switch p.Pcolor {
+	case "white":
+		letters = " PRNBQK"
+	case "black":
+		letters = " prnbqk"
+	default:
+		return "."
 	}
-	fmt.Printf("%c ", str)
-	return nil
+	return string(letters[p.Ptype])
+}
+
+// PrintE prints one piece, retaining the original display helper.
+func PrintE(p PieceType) error {
+	_, err := fmt.Printf("%s ", p)
+	return err
+}
+
+// PieceTypeA retains the existing piece-to-string helper used by FEN.
+func PieceTypeA(p PieceType) string {
+	return p.String()
 }
