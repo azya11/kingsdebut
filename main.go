@@ -5,6 +5,8 @@
 package main
 
 import (
+	"fmt"
+
 	"kingsdebut.com/xo/internal/chess"
 )
 
@@ -16,5 +18,5 @@ func main() {
 		println("Failed to initalize new board")
 	}
 	chess.DisplayBoard(board)
-	chess.FEN(board)
+	fmt.Println(chess.FEN(board))
 }
